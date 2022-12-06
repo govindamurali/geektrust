@@ -1,39 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
+	"geektrust/reader"
 )
 
 func main() {
-	cliArgs := os.Args[1:]
 
-	if len(cliArgs) == 0 {
-		fmt.Println("Please provide the input file path")
+	filePath := reader.GetFilePath()
+	comms := reader.GetStrings(filePath)
+	fmt.Println(comms)
 
-		return
-	}
-
-	filePath := cliArgs[0]
-	file, err := os.Open(filePath)
-
-	if err != nil {
-		fmt.Println("Error opening the input file")
-
-		return
-	}
-
-	defer file.Close()
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-		/*
-			args := scanner.Text()
-			argList := strings.Fields(args)
-
-			Add your code here to process the input commands
-		*/
-
-	}
 }
