@@ -1,19 +1,7 @@
 package command
 
-import "geektrust/dal"
-
-const (
-	allocateCommand  = "allocate"
-	balanceCommand   = "balance"
-	changeCommand    = "change"
-	rebalanceCommand = "rebalance"
-	sipCommand       = "sip"
-)
+import "geektrust/portfolio"
 
 type iCommand interface {
-	Execute(portfolio dal.Portfolio)
-}
-
-type iDisplay interface {
-	Display(val string)
+	Execute(portfolio portfolio.Portfolio) error
 }

@@ -7,3 +7,7 @@ type consoleDisplay struct{}
 func (c *consoleDisplay) Display(val string) {
 	fmt.Println(val)
 }
+
+func GetConsoleDisplay() IDisplay {
+	return &consoleDisplay{}
+}
