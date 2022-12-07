@@ -16,5 +16,7 @@ func TestAllocation_Execute(t *testing.T) {
 }
 
 func Test_GetAllocate(t *testing.T) {
-	getAllocateCommand([]string{"ALLOCATE", "6000", "3000", "1000"})
+	allocation, err := getAllocateCommand([]string{"ALLOCATE", "6000", "3000", "1000"})
+	assert.Nil(t, err)
+	assert.Equal(t, allocation, &allocate{[]int{6000, 3000, 1000}})
 }
