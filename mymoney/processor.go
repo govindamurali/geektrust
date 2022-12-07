@@ -13,9 +13,8 @@ type processor struct {
 }
 
 func (p *processor) Run() {
-	commandStrings := p.getCommands()
 	portfolio := portfolio.GetFreshPortfolio()
-	p.executeCommands(commandStrings, portfolio)
+	p.executeCommands(p.getCommands(), portfolio)
 }
 
 func (p *processor) getCommands() []string {
