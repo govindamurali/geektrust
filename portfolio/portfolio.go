@@ -111,5 +111,4 @@ func (p *portfolio) allocateForMonth(month enum.Month, allocation ClasswiseAlloc
 	monthlyAllocation[month] = allocation
 	p.monthlyAllocation[p.lastAllocatedYear] = monthlyAllocation
 	p.lastCalculatedMonth = month
-
 }
