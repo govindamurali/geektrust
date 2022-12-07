@@ -3,6 +3,7 @@ package portfolio
 import (
 	"geektrust/enum"
 	"geektrust/errors"
+	"sync"
 )
 
 type portfolio struct {
@@ -14,6 +15,7 @@ type portfolio struct {
 	lastAllocatedYear   int
 	lastRebalancedMonth enum.Month
 	calculator          calculator
+	mutex               sync.RWMutex
 }
 
 func (p *portfolio) Allocate(allocationMap ClasswiseAllocationMap) error {
@@ -59,6 +61,8 @@ func (p *portfolio) Change(month enum.Month, change Change) error {
 
 func (p *portfolio) GetBalance(month enum.Month) (ClasswiseAllocationMap, error) {
 
+	p.mutex.RLock()
+	defer p.mutex.RUnlock()
 	allocation := p.monthlyAllocation[p.lastAllocatedYear][month]
 	return allocation.toMap(), nil
 }
@@ -72,11 +76,16 @@ func (p *portfolio) GetLastRebalance() (classwiseAllocation ClasswiseAllocationM
 		err = errors.ErrInvalidCommandArguments
 		return
 	}
+	p.mutex.RLock()
+	defer p.mutex.RUnlock()
 	allocation := p.monthlyAllocation[p.lastAllocatedYear][p.lastRebalancedMonth]
 	return allocation.toMap(), nil
 }
 
 func (p *portfolio) getLastAllocation(month enum.Month) (lastAllocation ClasswiseAllocation, err error) {
+	p.mutex.RLock()
+	defer p.mutex.RUnlock()
+
 	if month == enum.January {
 		p.monthlyAllocation = append(p.monthlyAllocation, make(MonthlyAllocation))
 		if p.lastCalculatedMonth == enum.December {
@@ -96,6 +105,8 @@ func (p *portfolio) getLastAllocation(month enum.Month) (lastAllocation Classwis
 }
 
 func (p *portfolio) allocateForMonth(month enum.Month, allocation ClasswiseAllocation) {
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
 	monthlyAllocation := p.monthlyAllocation[p.lastAllocatedYear]
 	monthlyAllocation[month] = allocation
 	p.monthlyAllocation[p.lastAllocatedYear] = monthlyAllocation

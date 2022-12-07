@@ -1,6 +1,9 @@
 package portfolio
 
-import "geektrust/enum"
+import (
+	"geektrust/enum"
+	"sync"
+)
 
 type Portfolio interface {
 	StartSip(sip ClasswiseAllocationMap)
@@ -22,5 +25,6 @@ func GetFreshPortfolio() Portfolio {
 		lastRebalancedMonth: enum.InvalidMonth,
 		monthlyAllocation:   make([]MonthlyAllocation, 0),
 		calculator:          calculator{},
+		mutex:               sync.RWMutex{},
 	}
 }

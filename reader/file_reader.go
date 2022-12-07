@@ -2,7 +2,6 @@ package reader
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 )
 
@@ -12,8 +11,6 @@ func GetStrings(filePath string) (inputs []string, err error) {
 	if err != nil {
 		return
 	}
-
-	fmt.Println("File opened")
 
 	inputs = make([]string, 0)
 
