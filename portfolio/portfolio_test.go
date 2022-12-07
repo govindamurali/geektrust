@@ -2,6 +2,7 @@ package portfolio
 
 import (
 	"geektrust/enum"
+	"geektrust/errors"
 	"github.com/stretchr/testify/assert"
 	"sync"
 	"testing"
@@ -98,7 +99,7 @@ func TestPortfolio_GetBalance(t *testing.T) {
 	assert.Equal(t, bal, ClasswiseAllocationMap{enum.Equity: 5, enum.Debt: 6, enum.Gold: 7})
 }
 
-func TestPortfolio_GetLastRebalance(t *testing.T) {
+func TestPortfolio_GetLastRebalance_Success(t *testing.T) {
 	folio := portfolio{
 		initialAllocation: ClasswiseAllocation{},
 		allocated:         false,
@@ -147,6 +148,47 @@ func TestPortfolio_GetLastRebalance(t *testing.T) {
 	bal, err := folio.GetLastRebalance()
 	assert.Nil(t, err)
 	assert.Equal(t, bal, ClasswiseAllocationMap{enum.Equity: 13, enum.Debt: 14, enum.Gold: 15})
+}
+
+func TestPortfolio_GetLastRebalance_Failure(t *testing.T) {
+	folio := portfolio{
+		initialAllocation: ClasswiseAllocation{},
+		allocated:         false,
+		monthlyAllocation: []MonthlyAllocation{
+			{
+				enum.January: ClasswiseAllocation{
+					Equity: 2,
+					Debt:   3,
+					Gold:   4,
+				},
+				enum.February: ClasswiseAllocation{
+					Equity: 5,
+					Debt:   6,
+					Gold:   7,
+				},
+				enum.March: ClasswiseAllocation{
+					Equity: 7,
+					Debt:   8,
+					Gold:   9,
+				},
+				enum.April: ClasswiseAllocation{
+					Equity: 10,
+					Debt:   11,
+					Gold:   12,
+				},
+			},
+		},
+		sip:                 ClasswiseAllocation{},
+		lastCalculatedMonth: enum.July,
+		lastAllocatedYear:   0,
+		lastRebalancedMonth: enum.InvalidMonth,
+		calculator:          calculator{},
+		mutex:               sync.RWMutex{},
+	}
+
+	bal, err := folio.GetLastRebalance()
+	assert.Error(t, err, errors.ErrInvalidCommandArguments)
+	assert.Nil(t, bal)
 }
 
 func TestPortfolio_Change(t *testing.T) {
