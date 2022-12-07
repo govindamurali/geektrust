@@ -38,7 +38,7 @@ func (p *portfolio) Change(month enum.Month, change Change) error {
 		return errors.ErrPortfolioNotAllocated
 	}
 
-	allocation, err := p.getLastAllocation(month)
+	allocation, err := p.getPreviousMonthAllocation(month)
 	if err != nil {
 		return err
 	}
@@ -82,7 +82,7 @@ func (p *portfolio) GetLastRebalance() (classwiseAllocation ClasswiseAllocationM
 	return allocation.toMap(), nil
 }
 
-func (p *portfolio) getLastAllocation(month enum.Month) (lastAllocation ClasswiseAllocation, err error) {
+func (p *portfolio) getPreviousMonthAllocation(month enum.Month) (lastAllocation ClasswiseAllocation, err error) {
 	p.mutex.RLock()
 	defer p.mutex.RUnlock()
 
