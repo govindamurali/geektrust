@@ -8,6 +8,9 @@ import (
 	"testing"
 )
 
+var filePathwithRebalance = "./test_files/input_with_rebalance.txt"
+var filePathwithoutRebalance = "./test_files/input_without_rebalance.txt"
+
 func TestProcessor_Run_Rebalanced(t *testing.T) {
 
 	mockDisplay := mocks2.NewDisplay(t)
@@ -22,7 +25,7 @@ func TestProcessor_Run_Rebalanced(t *testing.T) {
 			printedValues = append(printedValues, arg)
 
 		})
-	mockFilePathFetcher.On("GetFilePath").Return("./test_files/input_with_rebalance.txt")
+	mockFilePathFetcher.On("GetFilePath").Return(filePathwithRebalance)
 
 	processor := Processor{
 		console:         mockDisplay,
@@ -48,7 +51,7 @@ func TestProcessor_Run_NonRebalanced(t *testing.T) {
 			printedValues = append(printedValues, arg)
 
 		})
-	mockFilePathFetcher.On("GetFilePath").Return("./test_files/input_without_rebalance.txt")
+	mockFilePathFetcher.On("GetFilePath").Return(filePathwithoutRebalance)
 
 	processor := Processor{
 		console:         mockDisplay,
