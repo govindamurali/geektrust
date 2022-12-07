@@ -7,13 +7,11 @@ import (
 	"strings"
 )
 
-type CommandResolver struct {
-	validator
-}
+type commandResolver struct{}
 
 const commandSeparator = " "
 
-func (c *CommandResolver) GetCommand(s string, display output.Display) (iCommand, error) {
+func (c *commandResolver) GetCommand(s string, display output.Display) (iCommand, error) {
 
 	// todo add basic validations
 
@@ -28,7 +26,7 @@ func (c *CommandResolver) GetCommand(s string, display output.Display) (iCommand
 		return nil, err
 	}
 
-	err = c.validator.validateCount(commandArgs, commandType)
+	err = c.validateCount(commandArgs, commandType)
 	if err != nil {
 		return nil, err
 	}
@@ -37,17 +35,20 @@ func (c *CommandResolver) GetCommand(s string, display output.Display) (iCommand
 	case enum.AllocateCommand:
 		return getAllocateCommand(commandArgs)
 	case enum.BalanceCommand:
-		getBalanceCommand(commandArgs, display)
+		return getBalanceCommand(commandArgs, display)
 	case enum.ChangeCommand:
-		getChangeCommand(commandArgs)
+		return getChangeCommand(commandArgs)
 	case enum.RebalanceCommand:
-		getRebalanceCommand(display)
+		return getRebalanceCommand(display)
 	case enum.SipCommand:
 		return getSipCommand(commandArgs)
 	}
 	return nil, errors2.ErrInvalidCommand
 }
 
-func GetCommandResolver() *CommandResolver {
-	return &CommandResolver{}
+func (c *commandResolver) validateCount(args []string, commandType enum.CommandType) error {
+	if len(args) != commandType.GetArgsCount() {
+		return errors2.ErrInvalidCommandArguments
+	}
+	return nil
 }
