@@ -18,7 +18,7 @@ Internally both the scripts run the following commands
 
  # How to execute the unit tests
 
- The unit tests are ran and the coverage is calculated using the library `gotestsum`. This is independent of your solution and there is no need to add any dependency. However this will work only if you use Go Modules for dependency management.
+The unit tests are ran and the coverage is calculated using the library `gotestsum`. You might need to install to run these. 
 
 We execute the unit tests by running the following command from the directory $GOPATH/src/geektrust
 
