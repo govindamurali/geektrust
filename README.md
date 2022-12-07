@@ -1,3 +1,5 @@
+[![Go](https://github.com/govindamurali/geektrust/actions/workflows/go.yml/badge.svg)](https://github.com/govindamurali/geektrust/actions/workflows/go.yml)
+
 # Pre-requisites
 * Go 1.15.7/1.16.8/1.17
 * go tool
