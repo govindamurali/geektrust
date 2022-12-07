@@ -27,7 +27,7 @@ func TestProcessor_Run_Rebalanced(t *testing.T) {
 		})
 	mockFilePathFetcher.On("GetFilePath").Return(filePathwithRebalance)
 
-	processor := Processor{
+	processor := processor{
 		console:         mockDisplay,
 		filePathFetcher: mockFilePathFetcher,
 	}
@@ -53,7 +53,7 @@ func TestProcessor_Run_NonRebalanced(t *testing.T) {
 		})
 	mockFilePathFetcher.On("GetFilePath").Return(filePathwithoutRebalance)
 
-	processor := Processor{
+	processor := processor{
 		console:         mockDisplay,
 		filePathFetcher: mockFilePathFetcher,
 	}

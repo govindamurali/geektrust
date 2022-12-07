@@ -7,25 +7,18 @@ import (
 	"geektrust/reader"
 )
 
-type Processor struct {
+type processor struct {
 	console         output.Display
 	filePathFetcher reader.FilePathFetcher
 }
 
-func GetProcessor() *Processor {
-	return &Processor{
-		console:         output.GetConsoleDisplay(),
-		filePathFetcher: reader.GetConsoleFilePathFetcher(),
-	}
-}
-
-func (p *Processor) Run() {
+func (p *processor) Run() {
 	commandStrings := p.getCommands()
 	portfolio := portfolio.GetFreshPortfolio()
 	p.executeCommands(commandStrings, portfolio)
 }
 
-func (p *Processor) getCommands() []string {
+func (p *processor) getCommands() []string {
 	var commandStrings []string
 	var err error
 	for commandStrings == nil {
@@ -39,7 +32,7 @@ func (p *Processor) getCommands() []string {
 	return commandStrings
 }
 
-func (p *Processor) executeCommands(commandStrings []string, portfolio portfolio.Portfolio) {
+func (p *processor) executeCommands(commandStrings []string, portfolio portfolio.Portfolio) {
 	commandResolver := command.GetCommandResolver()
 	for _, val := range commandStrings {
 		command, err := commandResolver.GetCommand(val, p.console)
