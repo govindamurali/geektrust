@@ -16,6 +16,7 @@ func (r rebalance) Execute(portfolio portfolio.Portfolio) error {
 	if !portfolio.IsRebalanced() {
 		//todo rethink
 		r.display.Output("CANNOT_REBALANCE")
+		return nil
 	}
 
 	//todo check order
@@ -23,6 +24,7 @@ func (r rebalance) Execute(portfolio portfolio.Portfolio) error {
 	if err != nil {
 		return err
 	}
+
 	r.display.Output(strconv.Itoa(rebalanceVal[enum.Equity]) + " " + strconv.Itoa(rebalanceVal[enum.Debt]) + " " + strconv.Itoa(rebalanceVal[enum.Gold]))
 	return nil
 }

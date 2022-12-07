@@ -12,7 +12,9 @@ func TestAllocation_Execute(t *testing.T) {
 	porfolioMock.On("Allocate", portfolio.Allocation{1: 1, 2: 2, 3: 3}).Return(nil)
 	allocate := allocate{amount: []int{1, 2, 3}}
 	err := allocate.Execute(porfolioMock)
+	
 	assert.Nil(t, err)
+	porfolioMock.AssertCalled(t, "Allocate", portfolio.Allocation{1: 1, 2: 2, 3: 3})
 }
 
 func Test_GetAllocate(t *testing.T) {

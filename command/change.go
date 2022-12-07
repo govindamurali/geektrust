@@ -24,7 +24,7 @@ func (a *change) Execute(portfolio portfolio.Portfolio) error {
 
 func getChangeCommand(params []string) (changeCommand *change, err error) {
 
-	percentages, err := util.GetPercentagesFromString(params[1:3])
+	percentages, err := util.GetPercentagesFromString(params[1:4])
 	if err != nil {
 		return
 	}

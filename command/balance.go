@@ -13,18 +13,18 @@ type balance struct {
 }
 
 func (b balance) Execute(portfolio portfolio.Portfolio) error {
-	allocation, err := portfolio.GetBalance(b.month)
+	bal, err := portfolio.GetBalance(b.month)
 	if err != nil {
 		return err
 	}
 
-	if allocation == nil {
+	if bal == nil {
 		//todo move to error
 		b.display.Output("BALANCE UNAVAILABLE")
 	}
 
 	//todo change
-	b.display.Output(strconv.Itoa(allocation[enum.Equity]) + " " + strconv.Itoa(allocation[enum.Debt]) + " " + strconv.Itoa(allocation[enum.Gold]))
+	b.display.Output(strconv.Itoa(bal[enum.Equity]) + " " + strconv.Itoa(bal[enum.Debt]) + " " + strconv.Itoa(bal[enum.Gold]))
 	return nil
 }
 
