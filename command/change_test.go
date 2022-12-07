@@ -22,7 +22,7 @@ func TestChange_Execute(t *testing.T) {
 }
 
 func Test_GetChange(t *testing.T) {
-	changeCom, err := getChangeCommand([]string{"CHANGE", "1.0", "2.2", "4.5", "MARCH"})
+	changeCom, err := getChangeCommand([]string{"CHANGE", "1.0%", "2.2% ", "4.5%", "MARCH "})
 	assert.Nil(t, err)
 	assert.Equal(t, changeCom, &change{enum.March, []float64{1.0, 2.2, 4.5}})
 }
