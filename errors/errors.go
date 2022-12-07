@@ -8,4 +8,5 @@ var (
 	ErrInvalidChangeMonth        = errors.New("change to be calculated only for consecutive months. input data invalid")
 	ErrInvalidCommand            = errors.New("invalid command")
 	ErrInvalidCommandArguments   = errors.New("invalid command arguments")
+	ErrInvalidMonth              = errors.New("invalid month parameter")
 )

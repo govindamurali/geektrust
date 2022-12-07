@@ -18,7 +18,7 @@ type Change map[enum.PortfolioType]float64
 func GetFreshPortfolio() Portfolio {
 	return &portfolio{
 		lastCalculatedMonth: 0,
-		lastAllocatedYear:   -1,
+		lastAllocatedYear:   0,
 		lastRebalancedMonth: 0,
 		monthlyAllocation:   make([]MonthlyAllocation, 0),
 	}

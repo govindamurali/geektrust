@@ -7,7 +7,10 @@ import (
 	"strings"
 )
 
-func GetFilePath() string {
+type consoleReader struct {
+}
+
+func (f *consoleReader) GetFilePath() string {
 	reader := bufio.NewReader(os.Stdin)
 
 	var filePath string

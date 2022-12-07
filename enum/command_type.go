@@ -25,21 +25,19 @@ var commandTypes = map[string]CommandType{
 	"sip":       SipCommand,
 }
 
-func (c CommandType) GetArgsCount() int {
-	switch c {
-	case RebalanceCommand:
-		return 1
-	case BalanceCommand:
-		return 2
-	case AllocateCommand, SipCommand:
-		return 4
-	case ChangeCommand:
-		return 5
-	}
-	return 0
+var commandTypeArgumentCountMap = map[CommandType]int{
+	RebalanceCommand: 1,
+	BalanceCommand:   2,
+	AllocateCommand:  4,
+	SipCommand:       4,
+	ChangeCommand:    5,
 }
 
-func GetCommandType(s string) (CommandType, error) {
+func (c CommandType) GetArgsCount() int {
+	return commandTypeArgumentCountMap[c]
+}
+
+func GetCommandTypeFromString(s string) (CommandType, error) {
 	s = strings.ToLower(strings.TrimSpace(s))
 	if c, ok := commandTypes[s]; ok {
 		return c, nil

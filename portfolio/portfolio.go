@@ -1,7 +1,6 @@
 package portfolio
 
 import (
-	"fmt"
 	"geektrust/enum"
 	"geektrust/errors"
 )
@@ -26,8 +25,8 @@ func (p *portfolio) Allocate(allocationMap ClasswiseAllocationMap) error {
 	return nil
 }
 
-func (p *portfolio) StartSip(sip ClasswiseAllocationMap) {
-	p.sip = sip.toStruct()
+func (p *portfolio) StartSip(sipMap ClasswiseAllocationMap) {
+	p.sip = sipMap.toStruct()
 }
 
 func (p *portfolio) Change(month enum.Month, change Change) error {
@@ -38,8 +37,12 @@ func (p *portfolio) Change(month enum.Month, change Change) error {
 	var updatedAllocation ClasswiseAllocation
 	if month == enum.January {
 		p.monthlyAllocation = append(p.monthlyAllocation, make(MonthlyAllocation))
-		p.lastAllocatedYear += 1
-		lastAllocation = p.initialAllocation
+		if p.lastCalculatedMonth == enum.December {
+			lastAllocation = p.monthlyAllocation[p.lastAllocatedYear][p.lastCalculatedMonth]
+			p.lastAllocatedYear += 1
+		} else {
+			lastAllocation = p.initialAllocation
+		}
 		updatedAllocation = lastAllocation
 	} else if int(month)-int(p.lastCalculatedMonth) != 1 {
 		return errors.ErrInvalidChangeMonth
@@ -48,18 +51,14 @@ func (p *portfolio) Change(month enum.Month, change Change) error {
 		updatedAllocation = addSip(lastAllocation, p.sip)
 	}
 
-	fmt.Print(month, updatedAllocation)
 	//todo validation checks
 	updatedAllocation = calculateChange(change, updatedAllocation)
-	fmt.Print(month, lastAllocation)
 
 	if month.IsRebalanceRequired() {
 		updatedAllocation = p.getRebalancedAllocation(updatedAllocation)
 		p.lastRebalancedMonth = month
-		fmt.Print(month, updatedAllocation)
 	}
 
-	fmt.Println()
 	monthlyAllocation := p.monthlyAllocation[p.lastAllocatedYear]
 	monthlyAllocation[month] = updatedAllocation
 	p.monthlyAllocation[p.lastAllocatedYear] = monthlyAllocation
@@ -82,7 +81,6 @@ func (p *portfolio) GetLastRebalance() (classwiseAllocation ClasswiseAllocationM
 		err = errors.ErrInvalidCommandArguments
 		return
 	}
-
 	allocation := p.monthlyAllocation[p.lastAllocatedYear][p.lastRebalancedMonth]
 	return allocation.toMap(), nil
 }
@@ -99,13 +97,12 @@ func (p *portfolio) getRebalancedAllocation(allocation ClasswiseAllocation) Clas
 }
 
 func calculateChange(change Change, allocation ClasswiseAllocation) (updatedAllocation ClasswiseAllocation) {
-	updatedAllocation = allocation
 
-	updatedAllocation.Equity = int(float64(updatedAllocation.Equity) * (1 + change[enum.Equity]/100))
-	updatedAllocation.Debt = int(float64(updatedAllocation.Debt) * (1 + change[enum.Debt]/100))
-	updatedAllocation.Gold = int(float64(updatedAllocation.Gold) * (1 + change[enum.Gold]/100))
+	allocation.Equity = int(float64(allocation.Equity) * (1 + change[enum.Equity]/100))
+	allocation.Debt = int(float64(allocation.Debt) * (1 + change[enum.Debt]/100))
+	allocation.Gold = int(float64(allocation.Gold) * (1 + change[enum.Gold]/100))
 
-	return updatedAllocation
+	return allocation
 }
 
 func addSip(allocation ClasswiseAllocation, sip ClasswiseAllocation) ClasswiseAllocation {

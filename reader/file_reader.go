@@ -22,7 +22,6 @@ func GetStrings(filePath string) (inputs []string, err error) {
 
 	for scanner.Scan() {
 		args := scanner.Text()
-		fmt.Println(args)
 		inputs = append(inputs, args)
 	}
 	return

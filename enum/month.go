@@ -46,7 +46,7 @@ func GetMonthFromString(s string) (Month, error) {
 	if month, ok := months[strings.ToLower(strings.TrimSpace(s))]; ok {
 		return month, nil
 	}
-	return InvalidMonth, errors.ErrInvalidCommandArguments
+	return InvalidMonth, errors.ErrInvalidMonth
 }
 
 //todo move elsewhere

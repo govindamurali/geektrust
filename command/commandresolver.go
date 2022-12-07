@@ -21,7 +21,7 @@ func (c *commandResolver) GetCommand(s string, display output.Display) (iCommand
 		return nil, errors2.ErrInvalidCommand
 	}
 
-	commandType, err := enum.GetCommandType(commandArgs[0])
+	commandType, err := enum.GetCommandTypeFromString(commandArgs[0])
 	if err != nil {
 		return nil, err
 	}
