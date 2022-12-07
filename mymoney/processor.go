@@ -20,10 +20,8 @@ func GetProcessor() *Processor {
 }
 
 func (p *Processor) Run() {
-
 	commandStrings := p.getCommands()
 	portfolio := portfolio.GetFreshPortfolio()
-
 	p.executeCommands(commandStrings, portfolio)
 }
 
