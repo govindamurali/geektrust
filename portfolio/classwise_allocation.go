@@ -1,6 +1,11 @@
 package portfolio
 
-import "geektrust/enum"
+import (
+	"geektrust/enum"
+	"strconv"
+)
+
+const spaceSeparator = " "
 
 type ClasswiseAllocationMap map[enum.PortfolioType]int
 
@@ -20,6 +25,10 @@ func (c *ClasswiseAllocation) toMap() ClasswiseAllocationMap {
 		enum.Debt:   c.Debt,
 		enum.Gold:   c.Gold,
 	}
+}
+
+func (c ClasswiseAllocationMap) ToString() string {
+	return strconv.Itoa(c[enum.Equity]) + spaceSeparator + strconv.Itoa(c[enum.Debt]) + spaceSeparator + strconv.Itoa(c[enum.Gold])
 }
 
 func (c ClasswiseAllocationMap) toStruct() ClasswiseAllocation {

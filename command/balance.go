@@ -4,13 +4,14 @@ import (
 	"geektrust/enum"
 	"geektrust/output"
 	"geektrust/portfolio"
-	"strconv"
 )
 
 type balance struct {
 	display output.Display
 	month   enum.Month
 }
+
+const messageBalanceUnavailable = "BALANCE UNAVAILABLE"
 
 func (b balance) Execute(portfolio portfolio.Portfolio) error {
 	bal, err := portfolio.GetBalance(b.month)
@@ -19,12 +20,11 @@ func (b balance) Execute(portfolio portfolio.Portfolio) error {
 	}
 
 	if bal == nil {
-		//todo move to error
-		b.display.Output("BALANCE UNAVAILABLE")
+		b.display.Output(messageBalanceUnavailable)
+		return nil
 	}
 
-	//todo change
-	b.display.Output(strconv.Itoa(bal[enum.Equity]) + " " + strconv.Itoa(bal[enum.Debt]) + " " + strconv.Itoa(bal[enum.Gold]))
+	b.display.Output(bal.ToString())
 	return nil
 }
 

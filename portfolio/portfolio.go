@@ -31,8 +31,6 @@ func (p *portfolio) StartSip(sipMap ClasswiseAllocationMap) {
 
 func (p *portfolio) Change(month enum.Month, change Change) error {
 
-	//todo check december
-	// todo race conditions
 	var lastAllocation ClasswiseAllocation
 	var updatedAllocation ClasswiseAllocation
 	if month == enum.January {
@@ -51,7 +49,6 @@ func (p *portfolio) Change(month enum.Month, change Change) error {
 		updatedAllocation = addSip(lastAllocation, p.sip)
 	}
 
-	//todo validation checks
 	updatedAllocation = calculateChange(change, updatedAllocation)
 
 	if month.IsRebalanceRequired() {
