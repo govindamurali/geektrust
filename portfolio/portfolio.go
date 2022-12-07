@@ -13,6 +13,7 @@ type portfolio struct {
 	lastCalculatedMonth enum.Month
 	lastAllocatedYear   int
 	lastRebalancedMonth enum.Month
+	calculator          calculator
 }
 
 func (p *portfolio) Allocate(allocationMap ClasswiseAllocationMap) error {
@@ -31,6 +32,10 @@ func (p *portfolio) StartSip(sipMap ClasswiseAllocationMap) {
 
 func (p *portfolio) Change(month enum.Month, change Change) error {
 
+	if !p.allocated {
+		return errors.ErrPortfolioNotAllocated
+	}
+
 	var lastAllocation ClasswiseAllocation
 	var updatedAllocation ClasswiseAllocation
 	if month == enum.January {
@@ -46,13 +51,14 @@ func (p *portfolio) Change(month enum.Month, change Change) error {
 		return errors.ErrInvalidChangeMonth
 	} else {
 		lastAllocation = p.monthlyAllocation[p.lastAllocatedYear][p.lastCalculatedMonth]
-		updatedAllocation = addSip(lastAllocation, p.sip)
+		p.calculator.addSip(&lastAllocation, p.sip)
+		updatedAllocation = lastAllocation
 	}
 
-	updatedAllocation = calculateChange(change, updatedAllocation)
+	p.calculator.calculateChange(&updatedAllocation, change)
 
 	if month.IsRebalanceRequired() {
-		updatedAllocation = p.getRebalancedAllocation(updatedAllocation)
+		p.calculator.rebalanceAllocation(&updatedAllocation, p.initialAllocation)
 		p.lastRebalancedMonth = month
 	}
 
@@ -80,35 +86,4 @@ func (p *portfolio) GetLastRebalance() (classwiseAllocation ClasswiseAllocationM
 	}
 	allocation := p.monthlyAllocation[p.lastAllocatedYear][p.lastRebalancedMonth]
 	return allocation.toMap(), nil
-}
-
-func (p *portfolio) getRebalancedAllocation(allocation ClasswiseAllocation) ClasswiseAllocation {
-	currentTotal := allocation.Equity + allocation.Debt + allocation.Gold
-	initialTotal := p.initialAllocation.Equity + p.initialAllocation.Debt + p.initialAllocation.Gold
-
-	allocation.Equity = currentTotal * p.initialAllocation.Equity / initialTotal
-	allocation.Debt = currentTotal * p.initialAllocation.Debt / initialTotal
-	allocation.Gold = currentTotal * p.initialAllocation.Gold / initialTotal
-
-	return allocation
-}
-
-func calculateChange(change Change, allocation ClasswiseAllocation) (updatedAllocation ClasswiseAllocation) {
-
-	allocation.Equity = int(float64(allocation.Equity) * (1 + change[enum.Equity]/100))
-	allocation.Debt = int(float64(allocation.Debt) * (1 + change[enum.Debt]/100))
-	allocation.Gold = int(float64(allocation.Gold) * (1 + change[enum.Gold]/100))
-
-	return allocation
-}
-
-func addSip(allocation ClasswiseAllocation, sip ClasswiseAllocation) ClasswiseAllocation {
-	if sip.isEmpty() {
-		return allocation
-	}
-	updatedAllocation := allocation
-	updatedAllocation.Equity = updatedAllocation.Equity + sip.Equity
-	updatedAllocation.Gold = updatedAllocation.Gold + sip.Gold
-	updatedAllocation.Debt = updatedAllocation.Debt + sip.Debt
-	return updatedAllocation
 }

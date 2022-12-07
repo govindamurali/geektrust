@@ -1,0 +1,12 @@
+mode: count
+geektrust/reader/console_reader.go:13.46,21.6 5 0
+geektrust/reader/console_reader.go:33.2,33.36 1 0
+geektrust/reader/console_reader.go:21.6,24.17 3 0
+geektrust/reader/console_reader.go:29.3,30.8 2 0
+geektrust/reader/console_reader.go:24.17,26.12 2 0
+geektrust/reader/file_path_fetcher.go:7.50,9.2 1 0
+geektrust/reader/file_reader.go:9.63,12.16 2 2
+geektrust/reader/file_reader.go:16.2,23.21 5 1
+geektrust/reader/file_reader.go:27.2,27.8 1 1
+geektrust/reader/file_reader.go:12.16,14.3 1 1
+geektrust/reader/file_reader.go:23.21,26.3 2 2

@@ -4,6 +4,7 @@ import "errors"
 
 var (
 	ErrPortfolioAlreadyAllocated = errors.New("portfolio already allocated")
+	ErrPortfolioNotAllocated     = errors.New("portfolio not allocated")
 	ErrNotAllocated              = errors.New("initial allocation not done")
 	ErrInvalidChangeMonth        = errors.New("change to be calculated only for consecutive months. input data invalid")
 	ErrInvalidCommand            = errors.New("invalid command")

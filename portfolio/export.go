@@ -19,7 +19,8 @@ func GetFreshPortfolio() Portfolio {
 	return &portfolio{
 		lastCalculatedMonth: 0,
 		lastAllocatedYear:   0,
-		lastRebalancedMonth: 0,
+		lastRebalancedMonth: enum.InvalidMonth,
 		monthlyAllocation:   make([]MonthlyAllocation, 0),
+		calculator:          calculator{},
 	}
 }
