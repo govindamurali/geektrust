@@ -1,4 +1,4 @@
 #!/bin/bash
 
 go build .
-./geektrust sample_input/input1.txt
+go run main.go
