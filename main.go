@@ -9,11 +9,14 @@ import (
 
 func main() {
 
-	filePath := reader.GetFilePath()
-	comms := reader.GetStrings(filePath)
-	portfolio := portfolio.GetEmptyPortfolio()
-	commandResolver := command.GetCommandResolver()
 	outputMode := output.GetConsoleDisplay()
+	filePath := reader.GetFilePath()
+	comms, err := reader.GetStrings(filePath)
+	if err != nil {
+		outputMode.Output(err.Error())
+	}
+	portfolio := portfolio.GetFreshPortfolio()
+	commandResolver := command.GetCommandResolver()
 	for _, val := range comms {
 		command, err := commandResolver.GetCommand(val, outputMode)
 		if err != nil {

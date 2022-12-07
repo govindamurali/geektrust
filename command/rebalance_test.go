@@ -14,7 +14,7 @@ func TestRebalance_Execute_Success(t *testing.T) {
 	displayMock := mocks2.NewDisplay(t)
 
 	porfolioMock.On("IsRebalanced").Return(true)
-	porfolioMock.On("GetLastRebalance").Return(portfolio.Allocation{enum.Equity: 100, enum.Debt: 22, enum.Gold: 44}, nil)
+	porfolioMock.On("GetLastRebalance").Return(portfolio.ClasswiseAllocationMap{enum.Equity: 100, enum.Debt: 22, enum.Gold: 44}, nil)
 	displayMock.On("Output", "100 22 44").Return()
 
 	rebalance := rebalance{displayMock}

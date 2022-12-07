@@ -19,7 +19,7 @@ func GetFilePath() string {
 		fmt.Print("-> ")
 		filePath, err = reader.ReadString('\n')
 		if err != nil {
-			fmt.Println("Please provide valid string as input", err)
+			fmt.Println("Please provide valid string as input ", err)
 			continue
 		}
 		// convert CRLF to LF
@@ -27,5 +27,5 @@ func GetFilePath() string {
 		break
 	}
 
-	return filePath
+	return strings.TrimSpace(filePath)
 }

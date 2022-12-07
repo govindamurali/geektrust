@@ -9,12 +9,12 @@ import (
 
 func TestSip_Execute(t *testing.T) {
 	porfolioMock := mocks.NewPortfolio(t)
-	porfolioMock.On("StartSip", portfolio.Allocation{1: 1, 2: 2, 3: 3}).Return(nil)
+	porfolioMock.On("StartSip", portfolio.ClasswiseAllocationMap{1: 1, 2: 2, 3: 3}).Return(nil)
 	sipCom := sip{amount: []int{1, 2, 3}}
 	err := sipCom.Execute(porfolioMock)
 
 	assert.Nil(t, err)
-	porfolioMock.AssertCalled(t, "StartSip", portfolio.Allocation{1: 1, 2: 2, 3: 3})
+	porfolioMock.AssertCalled(t, "StartSip", portfolio.ClasswiseAllocationMap{1: 1, 2: 2, 3: 3})
 }
 
 func Test_GetSip(t *testing.T) {

@@ -15,7 +15,7 @@ func TestBalance_Execute_Success(t *testing.T) {
 	displayMock := mocks2.NewDisplay(t)
 
 	month := enum.March
-	porfolioMock.On("GetBalance", month).Return(portfolio.Allocation{enum.Equity: 100, enum.Debt: 22, enum.Gold: 44}, nil)
+	porfolioMock.On("GetBalance", month).Return(portfolio.ClasswiseAllocationMap{enum.Equity: 100, enum.Debt: 22, enum.Gold: 44}, nil)
 	displayMock.On("Output", "100 22 44").Return()
 
 	balance := balance{displayMock, month}
