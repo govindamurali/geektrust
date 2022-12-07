@@ -4,7 +4,7 @@ import "geektrust/enum"
 
 type calculator struct{}
 
-func (c *calculator) rebalanceAllocation(allocation *ClasswiseAllocation, initialAllocation ClasswiseAllocation) {
+func (c *calculator) rebalancePortfolio(allocation *ClasswiseAllocation, initialAllocation ClasswiseAllocation) {
 	currentTotal := allocation.Equity + allocation.Debt + allocation.Gold
 	initialTotal := initialAllocation.Equity + initialAllocation.Debt + initialAllocation.Gold
 

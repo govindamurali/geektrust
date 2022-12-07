@@ -5,7 +5,6 @@ import (
 	"strings"
 )
 
-//todo think of moving
 type CommandType string
 
 const (

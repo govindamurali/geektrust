@@ -13,8 +13,6 @@ const commandSeparator = " "
 
 func (c *commandResolver) GetCommand(s string, display output.Display) (iCommand, error) {
 
-	// todo add basic validations
-
 	commandArgs := strings.Split(s, commandSeparator)
 
 	if len(commandArgs) == 0 {

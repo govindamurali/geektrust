@@ -24,7 +24,7 @@ func getAllocateCommand(params []string) (allocation *allocate, err error) {
 
 	allocationValues, err := util.GetSlicesStringToInt(params[1:])
 	if err != nil {
-		return allocation, errors.ErrInvalidCommandArguments
+		return allocation, errors.GetAppendedErrors(errors.ErrInvalidCommandArguments, err)
 	}
 	return &allocate{amount: allocationValues}, nil
 }

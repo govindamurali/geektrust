@@ -25,8 +25,7 @@ func getSipCommand(params []string) (sipCommand *sip, err error) {
 
 	sipValues, err := util.GetSlicesStringToInt(params[1:])
 	if err != nil {
-		// TODO return inside error values
-		return sipCommand, errors.ErrInvalidCommandArguments
+		return sipCommand, errors.GetAppendedErrors(errors.ErrInvalidCommandArguments, err)
 	}
 	return &sip{amount: sipValues}, nil
 }

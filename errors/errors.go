@@ -1,6 +1,9 @@
 package errors
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 var (
 	ErrPortfolioAlreadyAllocated = errors.New("portfolio already allocated")
@@ -11,3 +14,14 @@ var (
 	ErrInvalidCommandArguments   = errors.New("invalid command arguments")
 	ErrInvalidMonth              = errors.New("invalid month parameter")
 )
+
+func GetAppendedErrors(errs ...error) error {
+	if len(errs) == 0 {
+		return errs[0]
+	}
+	sb := strings.Builder{}
+	for _, err := range errs {
+		sb.WriteString(err.Error() + " ")
+	}
+	return errors.New(sb.String())
+}

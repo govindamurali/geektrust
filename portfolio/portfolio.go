@@ -36,36 +36,24 @@ func (p *portfolio) Change(month enum.Month, change Change) error {
 		return errors.ErrPortfolioNotAllocated
 	}
 
-	var lastAllocation ClasswiseAllocation
-	var updatedAllocation ClasswiseAllocation
-	if month == enum.January {
-		p.monthlyAllocation = append(p.monthlyAllocation, make(MonthlyAllocation))
-		if p.lastCalculatedMonth == enum.December {
-			lastAllocation = p.monthlyAllocation[p.lastAllocatedYear][p.lastCalculatedMonth]
-			p.lastAllocatedYear += 1
-		} else {
-			lastAllocation = p.initialAllocation
-		}
-		updatedAllocation = lastAllocation
-	} else if int(month)-int(p.lastCalculatedMonth) != 1 {
-		return errors.ErrInvalidChangeMonth
-	} else {
-		lastAllocation = p.monthlyAllocation[p.lastAllocatedYear][p.lastCalculatedMonth]
-		p.calculator.addSip(&lastAllocation, p.sip)
-		updatedAllocation = lastAllocation
+	allocation, err := p.getLastAllocation(month)
+	if err != nil {
+		return err
 	}
 
-	p.calculator.calculateChange(&updatedAllocation, change)
+	if month != enum.January {
+		p.calculator.addSip(&allocation, p.sip)
+	}
 
-	if month.IsRebalanceRequired() {
-		p.calculator.rebalanceAllocation(&updatedAllocation, p.initialAllocation)
+	p.calculator.calculateChange(&allocation, change)
+
+	if month.IsRebalanceMonth() {
+		p.calculator.rebalancePortfolio(&allocation, p.initialAllocation)
 		p.lastRebalancedMonth = month
 	}
 
-	monthlyAllocation := p.monthlyAllocation[p.lastAllocatedYear]
-	monthlyAllocation[month] = updatedAllocation
-	p.monthlyAllocation[p.lastAllocatedYear] = monthlyAllocation
-	p.lastCalculatedMonth = month
+	p.allocateForMonth(month, allocation)
+
 	return nil
 }
 
@@ -86,4 +74,31 @@ func (p *portfolio) GetLastRebalance() (classwiseAllocation ClasswiseAllocationM
 	}
 	allocation := p.monthlyAllocation[p.lastAllocatedYear][p.lastRebalancedMonth]
 	return allocation.toMap(), nil
+}
+
+func (p *portfolio) getLastAllocation(month enum.Month) (lastAllocation ClasswiseAllocation, err error) {
+	if month == enum.January {
+		p.monthlyAllocation = append(p.monthlyAllocation, make(MonthlyAllocation))
+		if p.lastCalculatedMonth == enum.December {
+			lastAllocation = p.monthlyAllocation[p.lastAllocatedYear][p.lastCalculatedMonth]
+			p.lastAllocatedYear += 1
+		} else {
+			lastAllocation = p.initialAllocation
+		}
+	} else if int(month)-int(p.lastCalculatedMonth) != 1 {
+		err = errors.ErrInvalidChangeMonth
+		return
+	} else {
+		lastAllocation = p.monthlyAllocation[p.lastAllocatedYear][p.lastCalculatedMonth]
+	}
+
+	return
+}
+
+func (p *portfolio) allocateForMonth(month enum.Month, allocation ClasswiseAllocation) {
+	monthlyAllocation := p.monthlyAllocation[p.lastAllocatedYear]
+	monthlyAllocation[month] = allocation
+	p.monthlyAllocation[p.lastAllocatedYear] = monthlyAllocation
+	p.lastCalculatedMonth = month
+
 }
