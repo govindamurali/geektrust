@@ -13,7 +13,7 @@ type CommandResolver struct {
 
 const commandSeparator = " "
 
-func (c *CommandResolver) GetCommand(s string, display output.IDisplay) (iCommand, error) {
+func (c *CommandResolver) GetCommand(s string, display output.Display) (iCommand, error) {
 
 	// todo add basic validations
 

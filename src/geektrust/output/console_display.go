@@ -4,10 +4,10 @@ import "fmt"
 
 type consoleDisplay struct{}
 
-func (c *consoleDisplay) Display(val string) {
+func (c *consoleDisplay) Output(val string) {
 	fmt.Println(val)
 }
 
-func GetConsoleDisplay() IDisplay {
+func GetConsoleDisplay() Display {
 	return &consoleDisplay{}
 }

@@ -8,14 +8,14 @@ import (
 )
 
 type rebalance struct {
-	display output.IDisplay
+	display output.Display
 }
 
 func (r rebalance) Execute(portfolio portfolio.Portfolio) error {
 
 	if !portfolio.IsRebalanced() {
 		//todo rethink
-		r.display.Display("CANNOT_REBALANCE")
+		r.display.Output("CANNOT_REBALANCE")
 	}
 
 	//todo check order
@@ -23,11 +23,11 @@ func (r rebalance) Execute(portfolio portfolio.Portfolio) error {
 	if err != nil {
 		return err
 	}
-	r.display.Display(strconv.Itoa(rebalanceVal[enum.Equity]) + " " + strconv.Itoa(rebalanceVal[enum.Debt]) + " " + strconv.Itoa(rebalanceVal[enum.Gold]))
+	r.display.Output(strconv.Itoa(rebalanceVal[enum.Equity]) + " " + strconv.Itoa(rebalanceVal[enum.Debt]) + " " + strconv.Itoa(rebalanceVal[enum.Gold]))
 	return nil
 }
 
-func getRebalanceCommand(display output.IDisplay) (*rebalance, error) {
+func getRebalanceCommand(display output.Display) (*rebalance, error) {
 	return &rebalance{
 		display: display,
 	}, nil

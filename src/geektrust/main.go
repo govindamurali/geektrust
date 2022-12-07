@@ -17,11 +17,11 @@ func main() {
 	for _, val := range comms {
 		command, err := commandResolver.GetCommand(val, outputMode)
 		if err != nil {
-			outputMode.Display(err.Error())
+			outputMode.Output(err.Error())
 		}
 		err = command.Execute(portfolio)
 		if err != nil {
-			outputMode.Display(err.Error())
+			outputMode.Output(err.Error())
 		}
 	}
 }

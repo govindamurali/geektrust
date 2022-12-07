@@ -50,6 +50,6 @@ func GetMonthFromString(s string) (Month, error) {
 }
 
 //todo move elsewhere
-func (m Month) isRebalanceRequired() bool {
+func (m Month) IsRebalanceRequired() bool {
 	return m == June || m == December
 }

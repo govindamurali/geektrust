@@ -3,13 +3,18 @@ package portfolio
 import "geektrust/enum"
 
 type Portfolio interface {
-	StartSip(sip allocation)
-	Change(month enum.Month, change change) error
-	GetBalance(month enum.Month) (allocation, error)
+	StartSip(sip Allocation)
+	Change(month enum.Month, change Change) error
+	GetBalance(month enum.Month) (Allocation, error)
 	IsRebalanced() bool
-	GetLastRebalance() (allocation, error)
-	Allocate(allocation allocation) error
+	GetLastRebalance() (Allocation, error)
+	Allocate(allocation Allocation) error
 }
+type Allocation map[enum.PortfolioType]int
+
+type MonthlyAllocation map[enum.Month]Allocation
+
+type Change map[enum.PortfolioType]float64
 
 func GetEmptyPortfolio() Portfolio {
 	return &portfolio{
