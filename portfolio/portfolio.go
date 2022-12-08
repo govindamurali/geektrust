@@ -43,7 +43,7 @@ func (p *portfolio) Change(month enum.Month, change Change) error {
 		return err
 	}
 
-	if month != enum.January {
+	if month != enum.January || p.lastAllocatedYear > 0 {
 		p.calculator.addSip(&allocation, p.sip)
 	}
 
